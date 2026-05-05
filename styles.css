@@ -1,0 +1,575 @@
+/* ========== CSS变量 & 基础重置 ========== */
+:root {
+  --bg-primary: #0f1419;
+  --bg-secondary: #1a1f2e;
+  --bg-tertiary: #242b3d;
+  --bg-card: #1e2538;
+  --border-color: #2d3548;
+  --text-primary: #e4e8f1;
+  --text-secondary: #8892a8;
+  --text-muted: #5c6479;
+  --accent-blue: #4a8cff;
+  --accent-blue-hover: #3a7af0;
+  --accent-green: #34d399;
+  --accent-red: #f87171;
+  --accent-orange: #fbbf24;
+  --accent-purple: #a78bfa;
+  --shadow: 0 4px 24px rgba(0,0,0,0.3);
+  --radius: 10px;
+  --radius-sm: 6px;
+  --transition: all 0.2s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+  height: 100vh;
+  user-select: none;
+}
+
+/* ========== 滚动条 ========== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ========== 顶部栏 ========== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  -webkit-app-region: drag;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-title h1 {
+  font-size: 18px;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-icon { font-size: 22px; -webkit-app-region: no-drag; }
+
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  -webkit-app-region: no-drag;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  transition: var(--transition);
+}
+
+.status-dot.online { background: var(--accent-green); box-shadow: 0 0 8px rgba(52,211,153,0.5); }
+.status-dot.offline { background: var(--text-muted); }
+.status-dot.error { background: var(--accent-red); box-shadow: 0 0 8px rgba(248,113,113,0.5); }
+
+/* ========== 主布局 ========== */
+.main-container {
+  display: grid;
+  grid-template-columns: 300px 1fr 340px;
+  height: calc(100vh - 50px);
+  gap: 1px;
+  background: var(--border-color);
+}
+
+.left-panel,
+.center-panel,
+.right-panel {
+  background: var(--bg-primary);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ========== 面板通用 ========== */
+.panel-section {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.section-header h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.section-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ========== 表单 ========== */
+.form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.form-row label {
+  width: 60px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.form-row select,
+.form-row input {
+  flex: 1;
+  padding: 6px 10px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.form-row select:focus,
+.form-row input:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 2px rgba(74,140,255,0.15);
+}
+
+.form-row select option {
+  background: var(--bg-secondary);
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* ========== 按钮 ========== */
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  flex: 1;
+}
+
+.btn-primary {
+  background: var(--accent-blue);
+  color: white;
+}
+
+.btn-primary:hover { background: var(--accent-blue-hover); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-danger {
+  background: transparent;
+  color: var(--accent-red);
+  border: 1px solid var(--accent-red);
+}
+
+.btn-danger:hover { background: rgba(248,113,113,0.1); }
+.btn-danger:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.btn-icon:hover { background: var(--bg-tertiary); }
+
+.btn-sm {
+  padding: 4px 10px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-sm:hover {
+  background: var(--border-color);
+  color: var(--text-primary);
+}
+
+.input-small {
+  width: 70px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+}
+
+.unit {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ========== 复选框 ========== */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.checkbox-label input[type="checkbox"] {
+  accent-color: var(--accent-blue);
+  width: 14px;
+  height: 14px;
+}
+
+/* ========== 串口标签页 ========== */
+.port-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.port-tab {
+  padding: 4px 10px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.port-tab:hover { border-color: var(--accent-blue); }
+.port-tab.active {
+  background: rgba(74,140,255,0.15);
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+}
+.port-tab .close-tab {
+  margin-left: 4px;
+  font-size: 10px;
+  opacity: 0.5;
+}
+.port-tab .close-tab:hover { opacity: 1; }
+
+/* ========== 已打开串口列表 ========== */
+.open-ports-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.open-port-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent-green);
+  font-size: 13px;
+}
+
+.open-port-item .port-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.open-port-item .port-name {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.open-port-item .port-detail {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.open-port-item .port-close {
+  color: var(--accent-red);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.open-port-item .port-close:hover {
+  background: rgba(248,113,113,0.15);
+}
+
+.empty-hint {
+  color: var(--text-muted);
+  font-size: 13px;
+  text-align: center;
+  padding: 16px;
+}
+
+/* ========== 数据区域 ========== */
+.data-area {
+  width: 100%;
+  height: 280px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.data-area .timestamp {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.data-area .rx-data {
+  color: var(--accent-green);
+}
+
+.data-area .tx-data {
+  color: var(--accent-orange);
+}
+
+.data-area .hex-data {
+  color: var(--accent-purple);
+}
+
+/* ========== 发送区域 ========== */
+.send-area-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.send-textarea {
+  width: 100%;
+  height: 100px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-size: 13px;
+  color: var(--text-primary);
+  resize: vertical;
+  outline: none;
+  transition: var(--transition);
+}
+
+.send-textarea:focus {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 2px rgba(74,140,255,0.1);
+}
+
+.send-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.send-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.auto-send-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ========== 波形图区域 ========== */
+.chart-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-container {
+  width: 100%;
+  height: 280px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+}
+
+.chart-config {
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+}
+
+.chart-config .form-row {
+  margin-bottom: 6px;
+}
+
+.chart-config .form-row:last-child {
+  margin-bottom: 0;
+}
+
+.chart-config .form-row label {
+  width: 70px;
+}
+
+/* ========== USB 设备列表 ========== */
+.usb-device-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.usb-device-item {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent-purple);
+  font-size: 13px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.usb-device-item:hover {
+  background: var(--bg-card);
+  border-left-color: var(--accent-blue);
+}
+
+.usb-device-item .usb-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.usb-device-item .usb-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.usb-device-item .usb-name {
+  color: var(--text-primary);
+  font-weight: 500;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.usb-device-item .usb-status {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.usb-device-item .usb-status.connected {
+  background: rgba(52,211,153,0.15);
+  color: var(--accent-green);
+}
+
+.usb-device-item .usb-status.disconnected {
+  background: rgba(248,113,113,0.15);
+  color: var(--accent-red);
+}
+
+.usb-device-item .usb-details {
+  display: none;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.usb-device-item.expanded .usb-details {
+  display: block;
+}
+
+.usb-device-item .usb-detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+}
+
+.usb-device-item .usb-detail-row .detail-label {
+  color: var(--text-secondary);
+}
+
+.usb-device-item .usb-detail-row .detail-value {
+  color: var(--text-primary);
+  font-family: 'Consolas', monospace;
+}
+
+.usb-device-item .usb-class-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-size: 10px;
+  background: rgba(74,140,255,0.15);
+  color: var(--accent-blue);
+  margin-right: 4px;
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 1200px) {
+  .main-container {
+    grid-template-columns: 260px 1fr 300px;
+  }
+}
+
+@media (max-width: 900px) {
+  .main-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
+}

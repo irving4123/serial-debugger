@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self';">
+  <title>串口调试助手</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- 顶部标题栏 -->
+  <header class="header">
+    <div class="header-title">
+      <span class="header-icon">🔌</span>
+      <h1>串口调试助手</h1>
+    </div>
+    <div class="header-info">
+      <span id="status-indicator" class="status-dot offline"></span>
+      <span id="status-text">未连接</span>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <!-- 左侧面板：串口配置与多串口管理 -->
+    <aside class="left-panel">
+      <!-- 串口管理标签页 -->
+      <div class="panel-section">
+        <div class="section-header">
+          <h3>📡 串口管理</h3>
+          <button id="btn-refresh-ports" class="btn-icon" title="刷新串口列表">🔄</button>
+        </div>
+        
+        <div class="port-tabs" id="port-tabs">
+          <!-- 由 JS 动态生成 -->
+        </div>
+
+        <!-- 串口配置 -->
+        <div class="port-config">
+          <div class="form-row">
+            <label>串口</label>
+            <select id="port-select">
+              <option value="">-- 请选择 --</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>波特率</label>
+            <select id="baudrate">
+              <option>9600</option>
+              <option selected>115200</option>
+              <option>4800</option>
+              <option>2400</option>
+              <option>19200</option>
+              <option>38400</option>
+              <option>57600</option>
+              <option>230400</option>
+              <option>460800</option>
+              <option>921600</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>数据位</label>
+            <select id="databits">
+              <option>8</option>
+              <option>7</option>
+              <option>6</option>
+              <option>5</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>停止位</label>
+            <select id="stopbits">
+              <option>1</option>
+              <option>1.5</option>
+              <option>2</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>校验位</label>
+            <select id="parity">
+              <option value="none">None</option>
+              <option value="even">Even</option>
+              <option value="odd">Odd</option>
+              <option value="mark">Mark</option>
+              <option value="space">Space</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button id="btn-open-port" class="btn btn-primary">打开串口</button>
+            <button id="btn-close-port" class="btn btn-danger" disabled>关闭串口</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 已打开串口列表 -->
+      <div class="panel-section">
+        <div class="section-header">
+          <h3>🔗 已打开串口</h3>
+        </div>
+        <div id="open-ports-list" class="open-ports-list">
+          <div class="empty-hint">暂无已打开的串口</div>
+        </div>
+      </div>
+
+      <!-- USB 设备检测 -->
+      <div class="panel-section">
+        <div class="section-header">
+          <h3>🔍 USB 设备</h3>
+          <div class="section-actions">
+            <button id="btn-refresh-usb" class="btn-icon" title="扫描USB设备">🔄</button>
+            <button id="btn-request-usb" class="btn-sm">+ 授权</button>
+          </div>
+        </div>
+        <div id="usb-device-list" class="usb-device-list">
+          <div class="empty-hint">点击 🔄 扫描已授权的USB设备</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 中间面板：数据收发 -->
+    <main class="center-panel">
+      <!-- 接收区域 -->
+      <div class="panel-section data-section">
+        <div class="section-header">
+          <h3>📥 接收区</h3>
+          <div class="section-actions">
+            <label class="checkbox-label">
+              <input type="checkbox" id="chk-hex-receive"> HEX
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="chk-auto-scroll" checked> 自动滚动
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="chk-show-time"> 显示时间戳
+            </label>
+            <button id="btn-clear-receive" class="btn-sm">清空</button>
+            <button id="btn-save-data" class="btn-sm">💾 保存</button>
+          </div>
+        </div>
+        <div id="receive-area" class="data-area" readonly></div>
+      </div>
+
+      <!-- 发送区域 -->
+      <div class="panel-section data-section">
+        <div class="section-header">
+          <h3>📤 发送区</h3>
+          <div class="section-actions">
+            <label class="checkbox-label">
+              <input type="checkbox" id="chk-hex-send"> HEX
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="chk-append-cr"> 追加 \r
+            </label>
+            <label class="checkbox-label">
+              <input type="checkbox" id="chk-append-lf"> 追加 \n
+            </label>
+            <button id="btn-clear-send" class="btn-sm">清空</button>
+          </div>
+        </div>
+        <div class="send-area-wrapper">
+          <textarea id="send-area" class="send-textarea" placeholder="输入要发送的数据..."></textarea>
+          <div class="send-actions-row">
+            <button id="btn-send" class="btn btn-primary">📤 发送</button>
+            <div class="auto-send-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="chk-auto-send"> 自动发送
+              </label>
+              <input type="number" id="auto-send-interval" value="1000" min="10" class="input-small">
+              <span class="unit">ms</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- 右侧面板：波形显示 -->
+    <aside class="right-panel">
+      <div class="panel-section chart-section">
+        <div class="section-header">
+          <h3>📊 波形显示</h3>
+          <div class="section-actions">
+            <button id="btn-pause-chart" class="btn-sm">⏸ 暂停</button>
+            <button id="btn-clear-chart" class="btn-sm">清空</button>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="waveChart"></canvas>
+        </div>
+        <div class="chart-config">
+          <div class="form-row">
+            <label>最大点数</label>
+            <input type="number" id="chart-max-points" value="100" min="10" max="1000" class="input-small">
+          </div>
+          <div class="form-row">
+            <label>解析方式</label>
+            <select id="chart-parse-mode">
+              <option value="ascii">ASCII数值</option>
+              <option value="hex">HEX数值</option>
+              <option value="int16">Int16 (2字节)</option>
+              <option value="float32">Float32 (4字节)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="node_modules/chart.js/dist/chart.umd.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>

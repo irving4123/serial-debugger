@@ -1,0 +1,52 @@
+{
+  "name": "serial-debugger",
+  "version": "1.0.0",
+  "description": "多功能串口调试上位机",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist-x64": "electron-builder --win --x64"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chart.js": "^4.4.0"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.serialdebugger.app",
+    "productName": "串口调试助手",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer.js",
+      "index.html",
+      "styles.css",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": null,
+      "artifactName": "${productName}-${version}-便携版.${ext}"
+    },
+    "extraMetadata": {
+      "main": "main.js"
+    }
+  }
+}
